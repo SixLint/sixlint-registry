@@ -15,8 +15,8 @@ exact pattern:
 
 - [`sep6-conformance`](https://github.com/SixLint/sep6-conformance) — the checking library + CLI. Produces the results this contract stores.
 - **This repo** — the on-chain record.
-- `sep6-conformance-backend` — the API service that runs the checker and writes to this contract.
-- `sep6-conformance-frontend` — dashboard over that backend.
+- [`sep6-conformance-backend`](https://github.com/SixLint/sep6-conformance-backend) — the API service that runs the checker and writes to this contract.
+- [`sep6-conformance-frontend`](https://github.com/SixLint/sep6-conformance-frontend) — dashboard over that backend.
 
 ```mermaid
 flowchart LR
