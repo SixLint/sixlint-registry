@@ -10,7 +10,7 @@
 //! "verified anchors".
 //!
 //! Structurally identical to sep24-attestation-registry,
-//! sep31-attestation-registry, and sep38-attestation-registry (the same
+//! corridorlint-registry, and rfqlint-registry (the same
 //! "domain -> pass/fail/hash" pattern applies regardless of which SEP is
 //! being attested to), but deployed as its own instance for this project.
 
