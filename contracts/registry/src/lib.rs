@@ -2,7 +2,7 @@
 
 //! On-chain registry of SEP-6 conformance attestations.
 //!
-//! An off-chain checker (see the `sep6-conformance` and backend repos)
+//! An off-chain checker (see the `sixlint` and backend repos)
 //! independently verifies that a given anchor's SEP-6 discovery surface
 //! (stellar.toml + GET /info) conforms to spec, then submits the result
 //! here. Wallets, exchanges, and directory sites can then query this

@@ -1,4 +1,4 @@
-# sep6-attestation-registry
+# sixlint-registry
 
 A minimal Soroban smart contract that stores on-chain attestations of
 [SEP-6](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0006.md)
@@ -13,20 +13,20 @@ and
 [`sep38-attestation-registry`](https://github.com/RFQLint/sep38-attestation-registry)'s
 exact pattern:
 
-- [`sep6-conformance`](https://github.com/SixLint/sep6-conformance) — the checking library + CLI. Produces the results this contract stores.
+- [`sixlint`](https://github.com/SixLint/sixlint) — the checking library + CLI. Produces the results this contract stores.
 - **This repo** — the on-chain record.
-- [`sep6-conformance-backend`](https://github.com/SixLint/sep6-conformance-backend) — the API service that runs the checker and writes to this contract.
-- [`sep6-conformance-frontend`](https://github.com/SixLint/sep6-conformance-frontend) — dashboard over that backend.
+- [`sixlint-backend`](https://github.com/SixLint/sixlint-backend) — the API service that runs the checker and writes to this contract.
+- [`sixlint-frontend`](https://github.com/SixLint/sixlint-frontend) — dashboard over that backend.
 
 ```mermaid
 flowchart LR
     Anchor[(Anchor under test)]
-    Lib[sep6-conformance<br/>library + CLI]
-    BE[sep6-conformance-backend]
+    Lib[sixlint<br/>library + CLI]
+    BE[sixlint-backend]
     subgraph This repo
-        Contract[sep6-attestation-registry<br/>Soroban contract]
+        Contract[sixlint-registry<br/>Soroban contract]
     end
-    FE[sep6-conformance-frontend]
+    FE[sixlint-frontend]
 
     Lib -->|GET stellar.toml, GET /info| Anchor
     BE -->|runs| Lib
@@ -61,7 +61,7 @@ data it's handed.
 
 ## Why this exists
 
-`sep6-conformance` can tell you, right now, whether an anchor's SEP-6
+`sixlint` can tell you, right now, whether an anchor's SEP-6
 implementation matches spec. But that result only exists wherever the
 check happened to run. A wallet, exchange, or directory site deciding
 whether to trust an anchor's programmatic deposit/withdraw support needs
@@ -89,12 +89,12 @@ exactly one poster:
 
 - **Trust the admin key** to only submit attestations reflecting real
   conformance runs. The admin is a single Stellar account, currently held
-  by `sep6-conformance-backend`.
+  by `sixlint-backend`.
 - Every write is a permanent, signed, publicly-visible Stellar
   transaction — the admin can overwrite what the *current* attestation
   for a domain says, but cannot rewrite the historical record of what it
   submitted and when.
-- Because `sep6-conformance` is open source, anyone can independently
+- Because `sixlint` is open source, anyone can independently
   re-run the same check and compare against `result_hash` — the admin's
   claims are falsifiable, not just asserted.
 - If the admin key were compromised, an attacker could write false
@@ -108,7 +108,7 @@ flowchart LR
         A[Admin key]
     end
     subgraph Verifiable by anyone
-        B[sep6-conformance source code]
+        B[sixlint source code]
         C[This contract's on-chain state]
         D[Ledger history of every attest tx]
     end
@@ -144,10 +144,10 @@ overwritten on each new `attest` call — current status, not a history log.
 
 ```mermaid
 sequenceDiagram
-    participant Backend as sep6-conformance-backend
-    participant Checker as sep6-conformance (library)
+    participant Backend as sixlint-backend
+    participant Checker as sixlint (library)
     participant Anchor
-    participant Contract as sep6-attestation-registry
+    participant Contract as sixlint-registry
 
     Backend->>Checker: runConformanceSuite(domain)
     Checker->>Anchor: GET stellar.toml, GET /info
@@ -173,7 +173,7 @@ sequenceDiagram
 Round-trip verified for real on this testnet deployment: `testanchor.stellar.org`
 was attested with `passed: true` — an honest reflection of that anchor's
 real SEP-6 conformance (all 13 checks pass, see
-[`sep6-conformance`'s README](https://github.com/SixLint/sep6-conformance#cli-usage)),
+[`sixlint`'s README](https://github.com/SixLint/sixlint#cli-usage)),
 not a placeholder value chosen for the demo. Contrast with
 [`sep38-attestation-registry`'s own verification write](https://github.com/RFQLint/sep38-attestation-registry#deployed-instances),
 which used `passed: false` for the same domain — different SEPs, honestly
@@ -200,7 +200,7 @@ against one of this contract's sibling deployments.
 - **No re-entrancy or asset-custody surface** — this contract never
   holds, transfers, or has authority over any asset.
 - **`domain` is an unvalidated string** — validation happens in
-  `sep6-conformance-backend` before `attest` is ever called.
+  `sixlint-backend` before `attest` is ever called.
 - **Admin rotation has no timelock** — same open trade-off as all three
   sibling contracts.
 
@@ -269,7 +269,7 @@ broken on another, and the on-chain record for each says exactly that.
 
 ## What this deliberately does not do
 
-- Run conformance checks itself (that's `sep6-conformance`'s job).
+- Run conformance checks itself (that's `sixlint`'s job).
 - Store more than the latest attestation per domain.
 - Provide any reputation, scoring, or ranking beyond a single pass/fail
   bit.
@@ -292,7 +292,7 @@ attestations can be written, since `set_admin` itself requires the
 current admin's signature.
 
 **Can anyone call `get_attestation`?** Yes — no authentication required.
-See `sep6-conformance-backend`'s `/api/registry/:domain/onchain` endpoint
+See `sixlint-backend`'s `/api/registry/:domain/onchain` endpoint
 for a worked example of a trustless read.
 
 ## Contributing
