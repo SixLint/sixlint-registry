@@ -8,9 +8,9 @@ verified?" that doesn't depend on trusting whoever runs the checker.
 
 Fourth and final instance in this project lineage, mirroring
 [`sep24-attestation-registry`](https://github.com/SEP-24-conform/sep24-attestation-registry),
-[`sep31-attestation-registry`](https://github.com/sep31-conformance/sep31-attestation-registry),
+[`corridorlint-registry`](https://github.com/sep31-conformance/corridorlint-registry),
 and
-[`sep38-attestation-registry`](https://github.com/RFQLint/sep38-attestation-registry)'s
+[`rfqlint-registry`](https://github.com/RFQLint/rfqlint-registry)'s
 exact pattern:
 
 - [`sixlint`](https://github.com/SixLint/sixlint) — the checking library + CLI. Produces the results this contract stores.
@@ -74,7 +74,7 @@ and only on a pass, submits a signed attestation here.
 The underlying problem — "durably record a pass/fail + hash for a domain,
 signed by one admin key" — is identical regardless of which SEP is being
 attested to, so this contract's Rust source is structurally the same as
-all three siblings' (`sep24-`, `sep31-`, `sep38-attestation-registry`).
+all three siblings' (`sep24-attestation-registry`, `corridorlint-registry`, `rfqlint-registry`).
 Deliberate reuse of a proven, already-audited-in-full pattern across all
 four, not duplicated effort by accident. What differs each time is only
 the surrounding context: a separate deployment, a separate admin key, and
@@ -175,7 +175,7 @@ was attested with `passed: true` — an honest reflection of that anchor's
 real SEP-6 conformance (all 13 checks pass, see
 [`sixlint`'s README](https://github.com/SixLint/sixlint#cli-usage)),
 not a placeholder value chosen for the demo. Contrast with
-[`sep38-attestation-registry`'s own verification write](https://github.com/RFQLint/sep38-attestation-registry#deployed-instances),
+[`rfqlint-registry`'s own verification write](https://github.com/RFQLint/rfqlint-registry#deployed-instances),
 which used `passed: false` for the same domain — different SEPs, honestly
 different real results for the same anchor.
 
@@ -260,7 +260,7 @@ Writing a "fresh" version each time would only introduce a chance for all
 four to silently diverge in behavior for no functional reason.
 
 **Why is it meaningful that this contract's real verification write used
-`passed: true` while sep38-attestation-registry's used `passed: false` for
+`passed: true` while rfqlint-registry's used `passed: false` for
 the same domain?** It's the clearest evidence across this whole lineage
 that these attestations reflect genuinely independent, real check
 results rather than a templated demo value copy-pasted across four
